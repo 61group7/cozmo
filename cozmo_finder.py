@@ -24,7 +24,7 @@ try:
 	import numpy as np
 	import copy
 	from multiprocessing import Process
-	from matplotlib import pyplot
+	from matplotlib import pyplot as plt
 	from cozmo.util import degrees, distance_mm, radians, speed_mmps, Vector2
 	from cozmo.lights import Color, Light
 	from cozmo.objects import CustomObject, CustomObjectMarkers, CustomObjectTypes
@@ -35,10 +35,24 @@ except ImportError:
 	input()
 	sys.exit()
 
-locs = list()
+locs = dict()
+plstat = False
 
 def handle_object_appeared(evt, **kw):
-	print(evt.obj.pose)
+	global locs, plstat
+	plt.clf()
+	locs.update({evt.obj.object_id: [evt.obj.pose.position.x, evt.obj.pose.position.y]})
+	plot_points = list()
+	pts_x, pts_y = list(), list()
+	for key in locs:
+		pts_x.append(locs[key][0])
+		pts_y.append(locs[key] [1])
+	plt.scatter(pts_x, pts_y, label='Cozmo 2D Graph')
+	plt.xlabel('xpos')
+	plt.ylabel('ypos')
+	plt.draw()
+	plt.pause(0.001)
+	# print(locs) # debug
 
 def fip(robot, af):
 
@@ -58,14 +72,10 @@ def fip(robot, af):
 		robot.turn_in_place(degrees(36)).wait_for_completed()
 	return FoundCube, ok
 
-def cube_return(robot):	
-	
-	locs = list()
+def cube_return(robot):
 
-	# This object will be the drop-off point for the cubes.
 	robot.add_event_handler(cozmo.objects.EvtObjectAppeared, handle_object_appeared)
-	dropoff = robot.world.define_custom_cube(CustomObjectTypes.CustomType00, CustomObjectMarkers.Hexagons2, 44, 30, 30, True)
-	
+	# dropoff = robot.world.define_custom_cube(CustomObjectTypes.CustomType00, CustomObjectMarkers.Hexagons2, 44, 30, 30, True)
 	# robot.camera.color_image_enabled = True
 
 	stordist = 200
@@ -81,10 +91,14 @@ def cube_return(robot):
 	
 	robot.drive_off_charger_contacts().wait_for_completed()
 	robot.drive_straight(distance_mm(150), speed_mmps(100)).wait_for_completed()
+	cdpos = copy.deepcopy(robot.pose)
+	print(type(locs))
+	locs.update({"charger_dock": [robot.pose.position.x, robot.pose.position.y]})
 	robot.turn_in_place(degrees(-90)).wait_for_completed()
 	robot.drive_straight(distance_mm(150), speed_mmps(100)).wait_for_completed()
 	robot.turn_in_place(degrees(-90)).wait_for_completed()
 	drop = copy.deepcopy(robot.pose)
+	locs.update({"drop": [robot.pose.position.x, robot.pose.position.y]})
 	robot.turn_in_place(degrees(-90)).wait_for_completed()
 	robot.drive_straight(distance_mm(150), speed_mmps(100)).wait_for_completed()
 	robot.turn_in_place(degrees(-90)).wait_for_completed()
@@ -103,6 +117,7 @@ def cube_return(robot):
 		if ok == True:
 			#robot.go_to_pose(findcube).wait_for_completed()
 			prev = copy.deepcopy(robot.pose)
+			locs.update({"search_pos": [robot.pose.position.x, robot.pose.position.y]})
 			x = robot.pickup_object(findcube, use_pre_dock_pose=False, in_parallel=False, num_retries=5).wait_for_completed()
 			#robot.go_to_object(findcube, distance_mm(30.0)).wait_for_completed()
 			#robot.drive_straight(distance_mm(10.0), speed_mmps(5)).wait_for_completed()
