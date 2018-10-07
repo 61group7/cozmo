@@ -23,6 +23,7 @@ try:
 	import asyncio, functools, math, sys, cozmo, cv2, time, os
 	import numpy as np
 	import copy
+	from multiprocessing import Process
 	from matplotlib import pyplot
 	from cozmo.util import degrees, distance_mm, radians, speed_mmps, Vector2
 	from cozmo.lights import Color, Light
@@ -34,9 +35,10 @@ except ImportError:
 	input()
 	sys.exit()
 
+locs = list()
+
 def handle_object_appeared(evt, **kw):
-	if isinstance(evt.obj, CustomObject):
-		return evt.obj.object_type
+	print(evt.obj.pose)
 
 def fip(robot, af):
 
@@ -58,6 +60,8 @@ def fip(robot, af):
 
 def cube_return(robot):	
 	
+	locs = list()
+
 	# This object will be the drop-off point for the cubes.
 	robot.add_event_handler(cozmo.objects.EvtObjectAppeared, handle_object_appeared)
 	dropoff = robot.world.define_custom_cube(CustomObjectTypes.CustomType00, CustomObjectMarkers.Hexagons2, 44, 30, 30, True)
@@ -109,6 +113,7 @@ def cube_return(robot):
 			robot.drive_straight(distance_mm(-stordist),speed_mmps(100)).wait_for_completed()
 			stordist -= storstep
 			robot.go_to_pose(prev).wait_for_completed()
+			
 			#robot.go_to_object(charger, distance_mm(150.0)).wait_for_completed()
 			#cozmo.robot.robot_alignment.RobotAlignmentTypes.Body = charger
 			#robot.turn_in_place(degrees(90)).wait_for_completed()
