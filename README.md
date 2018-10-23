@@ -1,5 +1,6 @@
 Cozmo Cube Finding Project
 ------
+
 This robot has about as much of a chance at changing the world as bitcoin does  
 **This is a WIP project, and as such does not currently function.**
 ----
