@@ -2,7 +2,8 @@ Cozmo Cube Finding Project
 ------
 
 This robot has about as much of a chance at changing the world as bitcoin does  
-**This is a WIP project, and as such does not currently function.**
+This is a WIP project, and as such does not currently function.
+
 ----
 ##### Hardware Requirements
 - 2 Cozmo robots. One needs to be outfitted with rangefinding capabilities
@@ -10,8 +11,9 @@ This robot has about as much of a chance at changing the world as bitcoin does
 - iOS/Android device connected to Cozmo in SDK mode.
 - x86-based machine with Python installed.
 ##### Software Requirements 
-*Arduino IDE required for flashing microcontroller board.*  
-*Tested only on Python 3.7.*  
+
+Arduino IDE required for flashing microcontroller board.  
+Tested only on Python 3.7.  
 Modules required:
 `python-pathfinding`
 `opencv-python`
@@ -20,6 +22,7 @@ Modules required:
 `numpy`
 `tkinter`
 `pillow`
+
 ---
 
 #### Usage
