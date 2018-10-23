@@ -1,0 +1,37 @@
+import cozmo
+from cozmo.util import degrees, distance_mm, speed_mmps
+import time
+
+def scout(dt):
+         #turn around to locate map 
+        robot.turn_in_place(degrees(90)).wait_for_completed()
+        robot.turn_in_place(degrees(90)).wait_for_completed()
+        robot.turn_in_place(degrees(90)).wait_for_completed()
+        robot.turn_in_place(degrees(90)).wait_for_completed()
+#need to check for front left and right side
+#check front first
+        if dt >= 5 :
+                robot.drive_straight(distance_mm(50), speed_mmps(50)).wait_for_completed()  
+        if dt < 5 :
+                #check for left 
+                robot.turn_in_place(degrees(90)).wait_for_completed()
+                def cdt(self, parameter_list):
+                        pass
+                if dt >= 5 :
+                robot.drive_straight(distance_mm(50), speed_mmps(50)).wait_for_completed()  
+                if dt < 5 :
+                        #check for right
+                        robot.turn_in_place(degrees(180)).wait_for_completed()
+                        if dt >= 5 :
+                        robot.drive_straight(distance_mm(100), speed_mmps(50)).wait_for_completed()  
+                        if dt < 5 :
+                        #go back
+                        robot.turn_in_place(degrees(-90)).wait_for_completed()
+                        robot.drive_straight(distance_mm(50), speed_mmps(50)).wait_for_completed()
+
+#dt == distance gain from ultrasonic sensor
+#cdt =chect for distance 
+def cdt(self, parameter_list):
+        pass
+                 
+cozmo.run_program(cozmo_program)
